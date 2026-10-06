@@ -1,0 +1,26 @@
+{
+  "schema": "spex.qualification-blockers/v1",
+  "blockers": [
+    {
+      "id": "hosted-action-qualification",
+      "status": "BLOCKED",
+      "evidence": "The Action exists locally. Its qualification workflow has not run in GitHub.",
+      "affects": ["composite Action hosted execution"],
+      "resolution": "Make the Action and candidate Spex commit accessible in GitHub, then dispatch the candidate qualification workflow."
+    },
+    {
+      "id": "scenario-release-distribution",
+      "status": "BLOCKED",
+      "evidence": "This campaign has not published the scenario-capable Spex binary. Installer integrity tests use mocked release assets.",
+      "affects": ["published-version Action installation end to end"],
+      "resolution": "After qualification, publish the candidate through the existing Spex release process and exercise the explicit version input."
+    },
+    {
+      "id": "live-runtime-qualification",
+      "status": "BLOCKED",
+      "evidence": "Local adapter integration uses a simulated KUTTL command. The migration environment requires authorized Kubernetes and ECR access.",
+      "affects": ["live inline acceptance", "live file acceptance", "live committed-scenario acceptance"],
+      "resolution": "Run the real migration-testbench qualification after its runtime lifecycle and new entrypoint integration are complete."
+    }
+  ]
+}

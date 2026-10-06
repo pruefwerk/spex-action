@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.spex/
+.qualification/
+.action-fixture/
+.ruff_cache/

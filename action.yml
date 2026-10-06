@@ -1,0 +1,75 @@
+name: Spex scenario
+description: Build and run a canonical Spex scenario through its selected runtime.
+inputs:
+  scenario:
+    description: Committed scenario TOML file.
+    required: false
+  runtime:
+    description: Runtime identifier, required when constructing a scenario.
+    required: false
+  name:
+    description: Optional scenario name override.
+    required: false
+  description:
+    description: Optional scenario description override.
+    required: false
+  timeout:
+    description: Optional scenario execution timeout.
+    required: false
+  spex:
+    description: Inline Spex YAML or Gherkin source.
+    required: false
+  spex-files:
+    description: External Spex files, one workspace-relative path per line.
+    required: false
+  runtime-config:
+    description: Runtime-owned TOML overlay. Use secret references, never literal credentials.
+    required: false
+  working-directory:
+    description: Scenario workspace and repository root.
+    default: .
+  artifact-directory:
+    description: Workspace-relative artifact base directory.
+    default: .spex/runs
+  spex-version:
+    description: Explicit published Spex tag; mutually exclusive with spex-executable.
+    required: false
+  spex-executable:
+    description: Existing Spex executable path, relative to working-directory or absolute.
+    required: false
+outputs:
+  scenario-id:
+    description: Full canonical scenario SHA-256 identity.
+    value: ${{ steps.execute.outputs.scenario-id }}
+  scenario-path:
+    description: Retained canonical scenario path.
+    value: ${{ steps.execute.outputs.scenario-path }}
+  result-path:
+    description: Execution result path, when available.
+    value: ${{ steps.execute.outputs.result-path }}
+  artifact-directory:
+    description: Execution artifact directory, when available.
+    value: ${{ steps.execute.outputs.artifact-directory }}
+  runtime:
+    description: Selected runtime identifier.
+    value: ${{ steps.execute.outputs.runtime }}
+runs:
+  using: composite
+  steps:
+    - id: execute
+      name: Build and run Spex scenario
+      shell: bash
+      env:
+        SPEX_ACTION_SCENARIO: ${{ inputs.scenario }}
+        SPEX_ACTION_RUNTIME: ${{ inputs.runtime }}
+        SPEX_ACTION_NAME: ${{ inputs.name }}
+        SPEX_ACTION_DESCRIPTION: ${{ inputs.description }}
+        SPEX_ACTION_TIMEOUT: ${{ inputs.timeout }}
+        SPEX_ACTION_INLINE: ${{ inputs.spex }}
+        SPEX_ACTION_FILES: ${{ inputs.spex-files }}
+        SPEX_ACTION_CONFIG: ${{ inputs.runtime-config }}
+        SPEX_ACTION_WORKSPACE: ${{ inputs.working-directory }}
+        SPEX_ACTION_ARTIFACTS: ${{ inputs.artifact-directory }}
+        SPEX_ACTION_VERSION: ${{ inputs.spex-version }}
+        SPEX_ACTION_EXECUTABLE: ${{ inputs.spex-executable }}
+      run: python3 "$GITHUB_ACTION_PATH/scripts/run.py"

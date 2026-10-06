@@ -1,0 +1,81 @@
+name: Action qualification
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      spex-ref:
+        description: Accessible Spex commit containing the scenario CLI; no release required.
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 -m pip install -r requirements-dev.txt
+      - run: ruff check scripts tests && ruff format --check scripts tests
+      - run: python3 -m unittest discover -s tests -p test_action.py -v
+
+  candidate:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: pruefwerk/spex
+          ref: ${{ inputs.spex-ref }}
+          path: .qualification/spex
+          persist-credentials: false
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: .qualification/spex/go.mod
+          cache-dependency-path: .qualification/spex/go.sum
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build the candidate, without publishing a release
+        working-directory: .qualification/spex
+        run: go build -o "$RUNNER_TEMP/spex-candidate" ./cmd/spex
+      - name: Qualify authoring modes and cancellation
+        env:
+          SPEX_TEST_EXECUTABLE: ${{ runner.temp }}/spex-candidate
+        run: python3 -m unittest discover -s tests -v
+      - name: Prepare simulated executor fixture
+        run: |
+          python3 tests/fixtures.py .action-fixture
+          printf '%s\n' "$PWD/.action-fixture/fake-bin" >> "$GITHUB_PATH"
+      - name: Exercise composite Action wiring
+        id: scenario
+        uses: ./
+        with:
+          working-directory: .action-fixture
+          scenario: scenario.toml
+          spex-executable: ${{ runner.temp }}/spex-candidate
+      - name: Check the exposed result
+        env:
+          RESULT_PATH: ${{ steps.scenario.outputs.result-path }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          with open(os.environ['RESULT_PATH']) as stream:
+              assert json.load(stream)['outcome'] == 'passed'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.scenario.outputs.artifact-directory != ''
+        with:
+          name: action-candidate-evidence
+          path: ${{ steps.scenario.outputs.artifact-directory }}
+          if-no-files-found: error
