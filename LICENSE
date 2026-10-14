@@ -1,0 +1,515 @@
+Internal Business Source Available License 1.0
+SPDX-License-Identifier: LicenseRef-IBSA-Spex-1.0
+
+Copyright (c) 2026 Sebastian Kaiser
+
+This Internal Business Source Available License 1.0 (the "License") governs use
+of the software, source code, object code, documentation, examples, tests,
+fixtures, configuration files, build files, scripts, container files, generated
+templates, and other materials distributed with this repository (collectively,
+the "Licensed Work").
+
+This License is source-available. It is not an open source license. Rights not
+expressly granted are reserved by Licensor.
+
+1. Acceptance
+
+By exercising any right granted under this License, You accept this License. If
+You do not accept this License, You may not use, copy, modify, build, run, or
+distribute the Licensed Work except to the extent mandatory law gives You rights
+that cannot be excluded.
+
+2. Definitions
+
+"Licensor" means the copyright holder identified above.
+
+"You" means the individual or legal entity exercising rights under this License.
+
+"Your Company" means You and any legal entity that You control, that controls
+You, or that is under common control with You. "Control" means direct or
+indirect ownership of more than fifty percent of the voting interests, or the
+legal power to direct management and policies.
+
+"Service Provider" means a contractor, consultant, cloud provider, hosting
+provider, CI/CD provider, security reviewer, or other third party acting solely
+on behalf of Your Company and only for Your Company's Permitted Internal Use.
+
+"Permitted Internal Use" means use of the Licensed Work solely for the internal
+business operations of Your Company. Permitted Internal Use includes internal
+development, internal testing, internal CI/CD, internal QA, internal validation,
+internal benchmarking, internal proof-of-concept work, internal security review,
+internal compliance review, internal staging, and internal production use.
+
+For clarity, Permitted Internal Use includes using the Licensed Work internally
+to test, validate, simulate, benchmark, or improve software, systems, services,
+or products that Your Company develops, operates, sells, or makes available to
+third parties, provided that the Licensed Work itself is not distributed,
+embedded, exposed, hosted, provided, or made available to those third parties.
+
+"External Offering" means any product, service, platform, hosted service,
+managed service, SaaS offering, API, appliance, marketplace offering,
+consulting deliverable, outsourced operation, certification service, testing
+service, simulation service, validation service, QA service, CI/CD service, or
+similar offering made available to a third party.
+
+"Commercial Redistribution" means selling, renting, leasing, sublicensing,
+publishing, distributing, making available, or otherwise providing the Licensed
+Work, in source or object form, to any third party, whether for payment or other
+commercial advantage.
+
+"Product Embedding" means including, bundling, embedding, integrating, linking,
+packaging, containerizing, or shipping the Licensed Work as part of any product,
+service, platform, appliance, SDK, developer tool, CI/CD tool, testing tool,
+simulation tool, validation tool, QA platform, certification platform, or other
+offering made available to a third party.
+
+"Protected Testing Functionality" means functionality of the Licensed Work for
+defining, generating, compiling, orchestrating, executing, recording,
+replaying, validating, verifying, benchmarking, simulating, or reporting on
+software tests, integration tests, system tests, acceptance tests, scenario
+tests, probes, assertions, fixtures, generated test workspaces, generated test
+jobs, test evidence, test reports, validation artifacts, simulation artifacts,
+quality-assurance workflows, reproducibility checks, or CI/CD test automation.
+
+"Implementation Materials" means source code, object code, architecture,
+internal APIs, command-line interfaces, configuration formats, generated
+templates, test fixtures, examples, documentation, build files, scripts,
+container files, scenario definitions, assertion definitions, probe
+definitions, report formats, evidence formats, and other materials copied from,
+adapted from, or derived from the Licensed Work.
+
+"AI System" means any machine learning system, foundation model, large language
+model, code generation model, embedding model, classifier, recommender,
+automated software engineering system, agentic system, or other system that
+learns from, is trained on, is fine-tuned on, is evaluated on, or generates
+outputs using data or examples.
+
+"AI Training Use" means using the Licensed Work, or any source code,
+documentation, examples, tests, fixtures, configuration files, generated
+templates, repository history, issues, discussions, pull requests, comments,
+metadata, or other materials associated with the Licensed Work, for any of the
+following purposes:
+
+(a) training, pre-training, fine-tuning, retraining, distilling, adapting, or
+    improving an AI System;
+
+(b) creating, augmenting, cleaning, labeling, curating, validating, testing, or
+    benchmarking a dataset for an AI System;
+
+(c) evaluating, ranking, scoring, red-teaming, reinforcement-learning,
+    preference-training, or otherwise improving an AI System;
+
+(d) generating synthetic training data, code examples, documentation examples,
+    test cases, fixtures, or benchmarks for an AI System;
+
+(e) extracting, encoding, indexing, or embedding the Licensed Work for a system
+    intended to reproduce, generate, explain, summarize, transform, translate,
+    complete, or substitute for the Licensed Work or substantially similar
+    software; or
+
+(f) enabling a third-party AI System to retain, memorize, reproduce, generate,
+    or make available source code, documentation, tests, fixtures, examples, or
+    functionality derived from the Licensed Work.
+
+"Your Materials" means software, configuration, tests, data, documentation, and
+other materials created independently by You and not copied or derived from the
+Licensed Work.
+
+"Output" means a report, log, artifact, test result, generated file, simulation
+result, validation result, or other output produced by running the Licensed Work
+on Your Materials.
+
+3. Grant of Rights
+
+Subject to this License, Licensor grants You a non-exclusive, worldwide,
+royalty-free, non-transferable, non-sublicensable license to:
+
+(a) read, inspect, and evaluate the Licensed Work;
+
+(b) copy, build, run, and use the Licensed Work for Permitted Internal Use;
+
+(c) modify the Licensed Work solely for Permitted Internal Use;
+
+(d) make internal copies of the Licensed Work solely as reasonably necessary for
+    Permitted Internal Use, including copies in private source repositories,
+    private package registries, private container registries, private artifact
+    stores, CI/CD systems, backup systems, and internal deployment systems;
+
+(e) permit employees and Service Providers to use the Licensed Work solely on
+    behalf of Your Company and solely for Permitted Internal Use; and
+
+(f) submit patches, pull requests, issues, bug reports, suggestions, or other
+    contributions to Licensor.
+
+4. Ownership of Your Materials and Outputs
+
+This License does not give Licensor ownership of Your Materials.
+
+Subject to Your compliance with this License, You may use Outputs for Your
+Company's internal business operations. You may also use Outputs in connection
+with Your Company's own products, services, compliance work, audits, releases,
+or internal records, provided that You do not distribute the Licensed Work,
+expose the Licensed Work, or use the Licensed Work to provide an External
+Offering without a separate commercial license.
+
+Outputs do not grant You any additional rights in the Licensed Work.
+
+To the extent an Output consists only of Your Materials, test results, logs,
+reports, measurements, validation results, simulation results, or other factual
+or operational information generated by running the Licensed Work on Your
+Materials, this License does not give Licensor ownership of that Output.
+
+To the extent an Output contains source code, object code, templates, examples,
+fixtures, documentation, configuration files, scripts, generated files, or other
+protectable expression copied from, adapted from, or derived from the Licensed
+Work, that portion of the Output remains subject to this License.
+
+You may not use Outputs to copy, distribute, expose, host, embed, or
+commercially provide the Licensed Work except as expressly permitted by this
+License or a separate written commercial license.
+
+5. Restrictions
+
+You may not do any of the following without a separate written commercial
+license from Licensor:
+
+(a) Commercially Redistribute the Licensed Work;
+
+(b) except for public forks created through the normal forking functionality of
+    GitHub or another repository hosting service used by Licensor as described
+    in Section 7, publish, distribute, sublicense, or make available source
+    code, object code, binaries, packages, container images, forks, modified
+    versions, derivative works, or compiled versions of the Licensed Work to
+    any third party;
+
+(c) provide the Licensed Work, or functionality derived from the Licensed Work,
+    as or as part of an External Offering;
+
+(d) use the Licensed Work to provide a hosted service, managed service, SaaS
+    service, API service, testing service, simulation service, validation
+    service, QA service, CI/CD service, certification service, compliance
+    service, audit service, consulting service, outsourced operation, or other
+    third-party service;
+
+(e) perform Product Embedding;
+
+(f) use the Licensed Work to provide paid consulting, managed operations,
+    outsourced testing, outsourced validation, outsourced QA, certification,
+    compliance, audit, or similar services to third parties where the Licensed
+    Work is a material component of the delivered service;
+
+(g) use the Licensed Work, modified versions of the Licensed Work, or
+    Implementation Materials to build, offer, market, sell, license, operate,
+    or make available an External Offering that provides Protected Testing
+    Functionality;
+
+For clarity, subsection 5(g) does not restrict independently developed software
+that was not created using, copied from, adapted from, derived from, or based on
+the Licensed Work or Implementation Materials.
+
+(h) remove, alter, obscure, or misrepresent any copyright, license, attribution,
+    source-availability, trademark, patent, commercial-license, or other legal
+    notice in the Licensed Work;
+
+(i) circumvent, bypass, disable, remove, alter, or interfere with license keys,
+    license checks, feature gates, usage limits, access controls, paid features,
+    telemetry controls, commercial-edition controls, or other technical
+    protection measures added by Licensor;
+
+(j) use Licensor's names, trademarks, service marks, logos, domain names,
+    product names, or brand identifiers except as necessary for truthful
+    reference to the Licensed Work;
+
+(k) misrepresent the Licensed Work as open source software or as software
+    licensed under an OSI-approved open source license;
+
+(l) use the Licensed Work in violation of applicable law; or
+
+(m) use Outputs, logs, traces, generated files, reports, repeated executions,
+    systematic output capture, instrumentation, or other technical analysis of
+    the Licensed Work to extract, copy, reproduce, or replicate source code,
+    templates, fixtures, documentation, configuration files, scripts, internal
+    interfaces, protocols as expressed in the Licensed Work, scenario
+    definitions, generated templates, or other protectable expression from the
+    Licensed Work for use in an External Offering, except to the extent
+    mandatory law permits such activity; or
+
+(n) authorize, assist, enable, or encourage any third party to do any of the
+    above.
+
+6. Artificial Intelligence, Machine Learning, and Text-and-Data Mining
+
+Licensor does not grant permission for AI Training Use.
+
+You may not use, copy, scrape, crawl, ingest, mine, extract, process, encode,
+index, embed, transform, or otherwise exploit the Licensed Work for AI Training
+Use without a separate written license from Licensor.
+
+You may not provide the Licensed Work to any third-party AI System, AI training
+provider, dataset provider, model provider, code-generation provider, or similar
+service if the provider may use the Licensed Work for AI Training Use, retain
+the Licensed Work for model improvement, include the Licensed Work in training
+or evaluation datasets, or make the Licensed Work available to other customers.
+
+You may use AI-assisted developer tools for Permitted Internal Use only if all
+of the following conditions are met:
+
+(a) the Licensed Work is not used for AI Training Use;
+
+(b) the AI-assisted tool provider is contractually or technically prohibited
+    from using the Licensed Work for training, fine-tuning, evaluation, dataset
+    creation, model improvement, or other AI Training Use;
+
+(c) the Licensed Work is not retained by the AI-assisted tool provider beyond
+    transient processing necessary to provide the requested assistance, except
+    where retained solely under Your Company's private account, private tenant,
+    or private enterprise configuration and not used for any third-party model
+    training or service improvement; and
+
+(d) the AI-assisted use does not result in publication, redistribution,
+    disclosure, or third-party availability of the Licensed Work.
+
+For purposes of Article 4(3) of Directive (EU) 2019/790 on copyright and
+related rights in the Digital Single Market, and any analogous text-and-data
+mining, machine-learning, or AI-training exception under applicable law,
+Licensor expressly reserves all rights to the Licensed Work for text and data
+mining, data scraping, machine learning, AI training, AI evaluation, model
+development, model improvement, dataset creation, and similar computational
+analysis. This reservation applies in all formats and through all channels,
+including source repositories, package registries, websites, archives, APIs,
+metadata, and machine-readable rights-reservation mechanisms.
+
+7. Public Forks and Contributions
+
+Public forks of the Licensed Work created through the normal forking
+functionality of GitHub or another repository hosting service used by Licensor
+are permitted, provided that the fork remains subject to this License,
+preserves all notices, and is not used as an independent distribution channel,
+product, service, hosted instance, managed service, package registry, container
+registry, or project made available to third parties that provides Protected
+Testing Functionality.
+
+This permission is limited to the technical act of creating and maintaining the
+fork through that repository hosting service. It does not grant any right to
+Commercial Redistribution, Product Embedding, External Offerings, AI Training
+Use, hosted or managed service use, use as a package or container distribution
+channel, or any other use restricted by this License.
+
+Except for public forks permitted by this Section 7 and contributions submitted
+back to Licensor, You may not publish, distribute, sublicense, or make available
+forks, modified versions, derivative works, source code, object code, binaries,
+packages, container images, or compiled versions of the Licensed Work to any
+third party without a separate written commercial license from Licensor.
+
+By submitting a contribution to Licensor, You grant Licensor a perpetual,
+worldwide, irrevocable, royalty-free, fully paid-up, transferable,
+sublicensable, and re-licensable license to use, copy, modify, prepare
+derivative works of, publish, distribute, sublicense, commercially license,
+relicense, and otherwise exploit the contribution as part of or in connection
+with the Licensed Work or any related product or service. You represent that You
+have the right to grant these rights.
+
+Licensor is not required to accept or use any contribution.
+
+8. No Implied Rights
+
+Licensor retains all rights not expressly granted. This License does not grant
+You ownership of the Licensed Work. This License does not grant any trademark,
+service mark, logo, domain name, trade name, brand, publicity, or endorsement
+rights.
+
+No rights are granted by implication, exhaustion, estoppel, or otherwise.
+
+9. Patent Rights
+
+Licensor grants You a non-exclusive, worldwide, royalty-free patent license
+under patent claims Licensor can license and that are necessarily infringed by
+Your Permitted Internal Use of the unmodified Licensed Work or Your internal
+modifications to the Licensed Work. This patent license applies only to
+Permitted Internal Use.
+
+No patent license is granted for Commercial Redistribution, Product Embedding,
+External Offerings, AI Training Use, managed services, hosted services,
+third-party services, External Offerings that provide Protected Testing
+Functionality, or any use requiring a separate commercial license.
+
+If You or Your Company bring a patent claim alleging that the Licensed Work or
+any contribution to it infringes a patent, then all patent licenses granted to
+You under this License terminate automatically as of the date the claim is
+filed.
+
+10. Third-Party Materials
+
+The Licensed Work may include or depend on third-party software, libraries,
+packages, data, specifications, protocols, or other materials. Third-party
+materials are governed by their own license terms. This License does not reduce,
+replace, or expand rights or obligations under third-party licenses.
+
+11. No Open Source Conversion
+
+This License does not require Licensor to release the Licensed Work under an
+open source license at any time. Licensor may release, dual-license, relicense,
+or stop distributing some or all of the Licensed Work at Licensor's sole
+discretion.
+
+12. Commercial Licensing
+
+Uses not permitted by this License require a separate written commercial license
+from Licensor.
+
+Commercial licensing inquiries:
+
+https://github.com/pruefwerk/spex
+
+A separate written commercial license may override this License only for the
+party and use expressly covered by that separate license.
+
+13. License Updates
+
+Licensor may publish revised versions of this License. The Licensed Work will
+remain governed by the license version under which it was originally received
+unless Licensor expressly permits use under a later version.
+
+14. Termination
+
+If You violate this License, the rights granted to You under this License
+terminate automatically.
+
+For a first-time, non-willful violation that does not involve Commercial
+Redistribution, Product Embedding, an External Offering, AI Training Use,
+license circumvention, notice removal, trademark misuse, patent litigation, or
+unlawful activity, Your rights will be reinstated if You cure the violation
+within thirty (30) days after becoming aware of it.
+
+For any other violation, reinstatement requires Licensor's written consent.
+
+Upon termination, You must stop using the Licensed Work and delete or destroy
+all copies under Your control, including modified versions and internal builds,
+except copies retained solely as required by law, bona fide archival backup
+policies, or evidence-preservation obligations. Retained copies may not be used
+except for the required legal, archival, or evidentiary purpose.
+
+15. Disclaimer of Warranty
+
+The Licensed Work is provided "as is" and "as available". To the maximum extent
+permitted by applicable law, Licensor disclaims all warranties, conditions,
+representations, and guarantees of any kind, whether express, implied,
+statutory, or otherwise, including warranties of merchantability, fitness for a
+particular purpose, title, non-infringement, accuracy, completeness,
+reliability, availability, security, compatibility, error-free operation, and
+absence of defects.
+
+Licensor does not warrant that the Licensed Work or any Output will be correct,
+complete, accurate, secure, uninterrupted, reproducible, compliant with any law,
+regulation, standard, certification, or contract, or suitable for any particular
+use.
+
+16. User Responsibility and Assumption of Risk
+
+You use the Licensed Work entirely at Your own risk and responsibility.
+
+You are solely responsible for:
+
+(a) determining whether the Licensed Work is appropriate for Your intended use;
+
+(b) validating the correctness, completeness, reliability, reproducibility,
+    security, and suitability of the Licensed Work and any Output;
+
+(c) reviewing and validating any Output before relying on it in development,
+    testing, validation, deployment, certification, compliance, operational,
+    business, or legal decisions;
+
+(d) maintaining appropriate backups, recovery procedures, security controls,
+    monitoring, fallback procedures, and operational safeguards;
+
+(e) complying with applicable laws, regulations, contractual obligations,
+    industry standards, certification requirements, security requirements, and
+    third-party rights; and
+
+(f) all consequences arising from Your use of the Licensed Work or any Output.
+
+The Licensed Work is not a substitute for independent engineering judgment,
+security review, legal review, compliance review, certification review,
+operational review, or professional advice.
+
+17. No Safety-Critical Use
+
+The Licensed Work is provided as a development, testing, validation,
+simulation, benchmarking, quality-assurance, and engineering tool.
+
+The Licensed Work is not designed, certified, or intended for use in
+safety-critical, mission-critical, life-critical, medical, aviation, aerospace,
+military, nuclear, emergency-response, industrial-safety, autonomous-vehicle, or
+similar environments where malfunction, failure, incorrect results, inaccurate
+outputs, delay, or unavailability could result in death, personal injury,
+environmental harm, regulatory violations, or significant property damage.
+
+Any such use is solely at Your own risk and responsibility.
+
+Licensor disclaims all responsibility for use of the Licensed Work in such
+environments to the maximum extent permitted by applicable law.
+
+18. Limitation of Liability
+
+To the maximum extent permitted by applicable law, Licensor will not be liable
+for any indirect, incidental, special, consequential, exemplary, punitive, or
+similar damages, or for loss of profits, revenue, data, goodwill, business
+opportunity, expected savings, business interruption, procurement of substitute
+goods or services, reputational harm, or other commercial or economic loss,
+arising out of or relating to the Licensed Work, any Output, or this License,
+even if Licensor has been advised of the possibility of such damages.
+
+To the maximum extent permitted by applicable law, Licensor's total aggregate
+liability arising out of or relating to the Licensed Work, any Output, or this
+License will not exceed the greater of (a) the amount You paid Licensor for the
+Licensed Work during the twelve (12) months before the event giving rise to
+liability, or (b) EUR 100.
+
+Nothing in this License excludes or limits liability to the extent such
+exclusion or limitation is prohibited by applicable law, including liability for
+intentional misconduct, gross negligence, fraud, injury to life, body, or
+health, liability under mandatory product-liability law, or any other liability
+that cannot lawfully be excluded or limited.
+
+19. Export Control and Sanctions
+
+You are solely responsible for compliance with all applicable export-control,
+import-control, sanctions, embargo, customs, and trade laws and regulations.
+
+You may not use, export, re-export, transfer, provide, or otherwise make
+available the Licensed Work in violation of applicable law.
+
+Licensor assumes no responsibility for Your compliance with such laws and
+regulations.
+
+20. Governing Law and Venue
+
+This License is governed by the laws of the Federal Republic of Germany,
+excluding conflict-of-law rules. The United Nations Convention on Contracts for
+the International Sale of Goods does not apply.
+
+Subject to mandatory law, the courts of Berlin, Germany shall have exclusive
+jurisdiction over disputes arising out of or relating to this License or the
+Licensed Work.
+
+21. Severability
+
+If any provision of this License is held invalid, illegal, or unenforceable, the
+remaining provisions remain in effect. The invalid, illegal, or unenforceable
+provision will be interpreted or replaced to the maximum extent permitted by law
+to preserve the original intent and economic purpose of this License.
+
+22. Entire Agreement
+
+This License is the entire agreement between You and Licensor for the Licensed
+Work, except to the extent You and Licensor have signed a separate written
+agreement governing Your use of the Licensed Work.
+
+23. Notices
+
+Notices, inquiries, and requests relating to this License may be submitted via:
+
+https://github.com/pruefwerk/spex/issues
+
+Licensor may update contact information in the repository, documentation, or
+official project website.

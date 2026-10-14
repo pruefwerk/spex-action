@@ -3,15 +3,31 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-    inputs:
-      spex-ref:
-        description: Accessible Spex commit containing the scenario CLI; no release required.
-        required: true
-        type: string
 permissions:
   contents: read
 jobs:
   unit:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ['3.11', '3.13']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python3 -m pip install -r requirements-dev.txt
+      - run: ruff check scripts tests && ruff format --check scripts tests
+      - run: pyright
+      - run: python3 -m unittest discover -s tests -v
+
+  artifact-wiring:
+    # Actual artifact storage; no receiver dispatch or credentials required.
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -20,62 +36,33 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - run: python3 -m pip install -r requirements-dev.txt
-      - run: ruff check scripts tests && ruff format --check scripts tests
-      - run: python3 -m unittest discover -s tests -p test_action.py -v
-
-  candidate:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/checkout@v4
-        with:
-          repository: pruefwerk/spex
-          ref: ${{ inputs.spex-ref }}
-          path: .qualification/spex
-          persist-credentials: false
-      - uses: actions/setup-go@v5
-        with:
-          go-version-file: .qualification/spex/go.mod
-          cache-dependency-path: .qualification/spex/go.sum
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Build the candidate, without publishing a release
-        working-directory: .qualification/spex
-        run: go build -o "$RUNNER_TEMP/spex-candidate" ./cmd/spex
-      - name: Qualify authoring modes and cancellation
+          python-version: '3.11'
+      - name: Prepare raw request without Spex
+        id: prepare
         env:
-          SPEX_TEST_EXECUTABLE: ${{ runner.temp }}/spex-candidate
-        run: python3 -m unittest discover -s tests -v
-      - name: Prepare simulated executor fixture
-        run: |
-          python3 tests/fixtures.py .action-fixture
-          printf '%s\n' "$PWD/.action-fixture/fake-bin" >> "$GITHUB_PATH"
-      - name: Exercise composite Action wiring
-        id: scenario
-        uses: ./
+          SPEX_ACTION_RUNTIME_WORKFLOW: fixture/runtime/.github/workflows/acceptance.yaml@fixture
+          SPEX_ACTION_DEFINITION: 'opaque fixture: the receiver parses definitions'
+        run: python3 scripts/transport.py prepare
+      - uses: actions/upload-artifact@v4
         with:
-          working-directory: .action-fixture
-          scenario: scenario.toml
-          spex-executable: ${{ runner.temp }}/spex-candidate
-      - name: Check the exposed result
+          name: spex-request-${{ steps.prepare.outputs.request-id }}
+          path: ${{ steps.prepare.outputs.request-path }}
+          if-no-files-found: error
+          retention-days: 3
+      - uses: actions/download-artifact@v4
+        with:
+          name: spex-request-${{ steps.prepare.outputs.request-id }}
+          path: ${{ runner.temp }}/downloaded-request
+      - name: Verify uploaded envelope
         env:
-          RESULT_PATH: ${{ steps.scenario.outputs.result-path }}
+          REQUEST_SHA: ${{ steps.prepare.outputs.request-sha256 }}
         run: |
           python3 - <<'PY'
-          import json, os
-          with open(os.environ['RESULT_PATH']) as stream:
-              assert json.load(stream)['outcome'] == 'passed'
+          import hashlib, json, os, pathlib
+          data = (pathlib.Path(os.environ['RUNNER_TEMP']) / 'downloaded-request/request.json').read_bytes()
+          assert hashlib.sha256(data).hexdigest() == os.environ['REQUEST_SHA']
+          request = json.loads(data)
+          assert request['source']['commit'] == os.environ['GITHUB_SHA']
+          assert request['schema'] == 'spex.transport/v1'
+          assert 'scenario_id' not in request
           PY
-      - uses: actions/upload-artifact@v4
-        if: always() && steps.scenario.outputs.artifact-directory != ''
-        with:
-          name: action-candidate-evidence
-          path: ${{ steps.scenario.outputs.artifact-directory }}
-          if-no-files-found: error

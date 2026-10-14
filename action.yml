@@ -1,11 +1,26 @@
 name: Spex scenario
-description: Build and run a canonical Spex scenario through its selected runtime.
+description: Prepare acceptance requests or dispatch them to a remote receiver.
 inputs:
-  scenario:
-    description: Committed scenario TOML file.
+  execution-mode:
+    description: dispatch submits and awaits a receiver; prepare uploads a request for a subsequent reusable-workflow job.
+    default: dispatch
+  runtime-workflow:
+    description: Receiver reference as owner/repository/.github/workflows/file.yaml@ref. The action verifies the run uses the resolved commit.
     required: false
+  remote-token:
+    description: Existing token valid for the entire wait. Alternative to app-id and app-private-key; never packaged.
+    required: false
+  app-id:
+    description: GitHub App ID. Provide with app-private-key instead of remote-token for automatic token renewal.
+    required: false
+  app-private-key:
+    description: GitHub App PEM private key. The App needs Actions write and Contents read on the receiver, and Actions read on the source. Never packaged.
+    required: false
+  wait-timeout:
+    description: Total remote wait, including queue time; bounded cancellation follows expiry.
+    default: 6h
   runtime:
-    description: Runtime identifier, required when constructing a scenario.
+    description: Optional receiver runtime selector, for example migration-testbench/v1@v0.4.0. Omit for the receiver default.
     required: false
   name:
     description: Optional scenario name override.
@@ -13,63 +28,102 @@ inputs:
   description:
     description: Optional scenario description override.
     required: false
-  timeout:
+  scenario-timeout:
     description: Optional scenario execution timeout.
     required: false
-  spex:
-    description: Inline Spex YAML or Gherkin source.
+  definition:
+    description: One inline scenario TOML, or YAML/Gherkin tests separated by standalone --- lines. Mutually exclusive with definition-files.
     required: false
-  spex-files:
-    description: External Spex files, one workspace-relative path per line.
-    required: false
-  runtime-config:
-    description: Runtime-owned TOML overlay. Use secret references, never literal credentials.
-    required: false
-  working-directory:
-    description: Scenario workspace and repository root.
-    default: .
-  artifact-directory:
-    description: Workspace-relative artifact base directory.
-    default: .spex/runs
-  spex-version:
-    description: Explicit published Spex tag; mutually exclusive with spex-executable.
-    required: false
-  spex-executable:
-    description: Existing Spex executable path, relative to working-directory or absolute.
+  definition-files:
+    description: Definition paths or globs relative to the caller's current directory, one per line. The receiver expands them at the workflow source SHA. Mutually exclusive with definition.
     required: false
 outputs:
+  request-artifact-id:
+    description: Uploaded request artifact ID. Pass with request-id and request-sha256 to a reusable workflow.
+    value: ${{ steps.package.outputs.artifact-id }}
   scenario-id:
-    description: Full canonical scenario SHA-256 identity.
-    value: ${{ steps.execute.outputs.scenario-id }}
-  scenario-path:
-    description: Retained canonical scenario path.
-    value: ${{ steps.execute.outputs.scenario-path }}
+    description: Final canonical scenario identity returned by the receiver, when available.
+    value: ${{ steps.submit.outputs.scenario-id }}
+  request-path:
+    description: Local raw submission envelope. It is not an executable scenario.
+    value: ${{ steps.prepare.outputs.request-path }}
+  request-sha256:
+    description: SHA-256 of the exact submitted envelope bytes.
+    value: ${{ steps.prepare.outputs.request-sha256 }}
   result-path:
-    description: Execution result path, when available.
-    value: ${{ steps.execute.outputs.result-path }}
+    description: Local sanitized result summary JSON, when written successfully. Full test evidence stays on the receiver.
+    value: ${{ steps.submit.outputs.result-path }}
   artifact-directory:
-    description: Execution artifact directory, when available.
-    value: ${{ steps.execute.outputs.artifact-directory }}
+    description: Local request and result directory, when available. Detailed test evidence stays in the remote run.
+    value: ${{ steps.prepare.outputs.artifact-directory }}
   runtime:
-    description: Selected runtime identifier.
-    value: ${{ steps.execute.outputs.runtime }}
+    description: Runtime identifier resolved by the receiver, when available.
+    value: ${{ steps.submit.outputs.runtime }}
+  runtime-release:
+    description: Exact runtime implementation release selected by the receiver, when available.
+    value: ${{ steps.submit.outputs.runtime-release }}
+  spex-version:
+    description: Exact Spex execution version reported by the receiver. This is an output, not a caller selection.
+    value: ${{ steps.submit.outputs.spex-version }}
+  request-id:
+    description: Unique remote submission identity.
+    value: ${{ steps.prepare.outputs.request-id }}
+  run-url:
+    description: Correlated remote workflow run, when discovered.
+    value: ${{ steps.submit.outputs.run-url }}
+  cancellation:
+    description: Action cancellation request status (not_requested, requested, or unconfirmed), not receiver completion or cleanup status.
+    value: ${{ steps.submit.outputs.cancellation }}
 runs:
   using: composite
   steps:
-    - id: execute
-      name: Build and run Spex scenario
+    - name: Validate execution mode and inputs
       shell: bash
       env:
-        SPEX_ACTION_SCENARIO: ${{ inputs.scenario }}
+        SPEX_ACTION_EXECUTION_MODE: ${{ inputs.execution-mode }}
+        SPEX_ACTION_RUNTIME_WORKFLOW: ${{ inputs.runtime-workflow }}
+        SPEX_REMOTE_TOKEN: ${{ inputs.remote-token }}
+        SPEX_REMOTE_APP_ID: ${{ inputs.app-id }}
+        SPEX_REMOTE_APP_PRIVATE_KEY: ${{ inputs.app-private-key }}
+      run: python3 "$GITHUB_ACTION_PATH/scripts/transport.py" validate
+    - id: prepare
+      name: Prepare raw submission
+      shell: bash
+      env:
+        SPEX_ACTION_EXECUTION_MODE: ${{ inputs.execution-mode }}
+        SPEX_REMOTE_TOKEN: ''
+        SPEX_REMOTE_APP_ID: ''
+        SPEX_REMOTE_APP_PRIVATE_KEY: ''
+        SPEX_ACTION_RUNTIME_WORKFLOW: ${{ inputs.runtime-workflow }}
+        SPEX_ACTION_WAIT_TIMEOUT: ${{ inputs.wait-timeout }}
         SPEX_ACTION_RUNTIME: ${{ inputs.runtime }}
         SPEX_ACTION_NAME: ${{ inputs.name }}
         SPEX_ACTION_DESCRIPTION: ${{ inputs.description }}
-        SPEX_ACTION_TIMEOUT: ${{ inputs.timeout }}
-        SPEX_ACTION_INLINE: ${{ inputs.spex }}
-        SPEX_ACTION_FILES: ${{ inputs.spex-files }}
-        SPEX_ACTION_CONFIG: ${{ inputs.runtime-config }}
-        SPEX_ACTION_WORKSPACE: ${{ inputs.working-directory }}
-        SPEX_ACTION_ARTIFACTS: ${{ inputs.artifact-directory }}
-        SPEX_ACTION_VERSION: ${{ inputs.spex-version }}
-        SPEX_ACTION_EXECUTABLE: ${{ inputs.spex-executable }}
-      run: python3 "$GITHUB_ACTION_PATH/scripts/run.py"
+        SPEX_ACTION_TIMEOUT: ${{ inputs.scenario-timeout }}
+        SPEX_ACTION_DEFINITION: ${{ inputs.definition }}
+        SPEX_ACTION_DEFINITION_FILES: ${{ inputs.definition-files }}
+      run: python3 "$GITHUB_ACTION_PATH/scripts/transport.py" prepare
+    - id: package
+      name: Upload submission envelope
+      uses: actions/upload-artifact@v4
+      with:
+        name: spex-request-${{ steps.prepare.outputs.request-id }}
+        path: ${{ steps.prepare.outputs.request-path }}
+        include-hidden-files: true
+        if-no-files-found: error
+        retention-days: 3
+    - id: submit
+      if: inputs.execution-mode == 'dispatch'
+      name: Submit and await remote acceptance
+      shell: bash
+      env:
+        SPEX_ACTION_REQUEST: ${{ steps.prepare.outputs.request-path }}
+        SPEX_ACTION_REQUEST_ID: ${{ steps.prepare.outputs.request-id }}
+        SPEX_ACTION_REQUEST_SHA: ${{ steps.prepare.outputs.request-sha256 }}
+        SPEX_ACTION_RUNTIME_WORKFLOW: ${{ inputs.runtime-workflow }}
+        SPEX_ACTION_WAIT_TIMEOUT: ${{ inputs.wait-timeout }}
+        SPEX_ACTION_ARTIFACT_ID: ${{ steps.package.outputs.artifact-id }}
+        SPEX_REMOTE_TOKEN: ${{ inputs.remote-token }}
+        SPEX_REMOTE_APP_ID: ${{ inputs.app-id }}
+        SPEX_REMOTE_APP_PRIVATE_KEY: ${{ inputs.app-private-key }}
+      run: python3 "$GITHUB_ACTION_PATH/scripts/transport.py" submit

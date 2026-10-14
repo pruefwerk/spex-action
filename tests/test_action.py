@@ -243,6 +243,15 @@ class ActionTests(unittest.TestCase):
             with self.assertRaises(action.ActionError):
                 action.install("v0.1.0", self.root)
 
+    def test_installer_refuses_missing_binary_stream(self):
+        with (
+            mock.patch.object(action, "download", self.release_download()),
+            mock.patch.object(action.tarfile.TarFile, "extractfile", return_value=None),
+        ):
+            with self.assertRaisesRegex(action.ActionError, "cannot be read"):
+                action.install("v0.1.0", self.root)
+        self.assertFalse((self.root / "spex").exists())
+
     def test_installer_refuses_unversioned_or_unsafe_input(self):
         with mock.patch.object(action, "download") as download:
             for value in ("latest", "main", "../../bad", "v1.2.3;echo bad"):

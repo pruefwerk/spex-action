@@ -86,7 +86,10 @@ def install(version, directory):
             or members[0].size > 128 * 1024 * 1024
         ):
             raise ActionError("Spex archive has no unique regular executable")
-        with bundle.extractfile(members[0]) as stream, executable.open("xb") as out:
+        stream = bundle.extractfile(members[0])
+        if stream is None:
+            raise ActionError("Spex archive executable cannot be read")
+        with stream, executable.open("xb") as out:
             while chunk := stream.read(1024 * 1024):
                 out.write(chunk)
     executable.chmod(0o700)
@@ -109,10 +112,11 @@ def command(argv, workspace):
         except ProcessLookupError:
             return
         if timer is None:
+            process_group = process.pid
 
             def force_stop():
                 try:
-                    os.killpg(process.pid, signal.SIGKILL)
+                    os.killpg(process_group, signal.SIGKILL)
                 except ProcessLookupError:
                     pass
 
