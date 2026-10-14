@@ -17,7 +17,7 @@ jobs:
       request-sha256: ${{ steps.prepare.outputs.request-sha256 }}
       request-artifact-id: ${{ steps.prepare.outputs.request-artifact-id }}
     steps:
-      - uses: pruefwerk/spex-action@v0.1.0-rc.1
+      - uses: pruefwerk/spex-action@v1
         id: prepare
         with:
           execution-mode: prepare

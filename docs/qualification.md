@@ -1,5 +1,13 @@
 # Action qualification checkpoint
 
+## v1 release
+
+Published `v1.0.0` and the `v1` Action tag from tested commit
+`a5af880742705dc4a0139f86b269d92db666a9ce`, the same implementation as
+`v0.1.0-rc.1`. This promotion adds no runtime behavior. The local and hosted
+qualification results below still apply, including the outstanding live
+caller-to-runtime, App authentication and cancellation/cleanup checks.
+
 ## First published preview
 
 Published `v0.1.0-rc.1` from commit
