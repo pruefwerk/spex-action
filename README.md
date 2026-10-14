@@ -11,7 +11,7 @@ job. This mode needs no remote destination or transport credentials. See
 artifact-ID output. The default `dispatch` mode submits the request and waits
 for the result. Failed acceptance tests fail the Action.
 
-The Action is unreleased. Hosted caller-to-receiver qualification is still
+This is a preview release. Hosted caller-to-receiver qualification is still
 pending. Receivers must implement the [receiver contract](docs/remote-protocol.md);
 earlier Spex submission receipts use a different protocol.
 
@@ -101,13 +101,13 @@ dump and local fixtures. The request artifact expires after three days.
 
 ## Examples
 
-These examples use a local checkout of the unpublished Action at
-`.github/actions/spex`. The receiver references are examples, not deployed releases.
+These examples use the first Action preview. Replace the receiver references with
+your runtime's published workflow and release.
 
 ### 1. Inline tests
 
 ```yaml
-- uses: ./.github/actions/spex
+- uses: pruefwerk/spex-action@v0.1.0-rc.1
   with:
     runtime-workflow: your-org/testbench/.github/workflows/acceptance.yaml@v1
     remote-token: ${{ secrets.ACCEPTANCE_TOKEN }}
@@ -124,7 +124,7 @@ The receiver must provide catalog bindings for these example steps.
 ### 2. Committed test files
 
 ```yaml
-- uses: ./.github/actions/spex
+- uses: pruefwerk/spex-action@v0.1.0-rc.1
   with:
     runtime-workflow: your-org/testbench/.github/workflows/acceptance.yaml@v1
     remote-token: ${{ secrets.ACCEPTANCE_TOKEN }}
@@ -136,7 +136,7 @@ The receiver must provide catalog bindings for these example steps.
 ### 3. Complete definition with fixture dependencies
 
 ```yaml
-- uses: ./.github/actions/spex
+- uses: pruefwerk/spex-action@v0.1.0-rc.1
   with:
     runtime-workflow: your-org/testbench/.github/workflows/acceptance.yaml@v1
     remote-token: ${{ secrets.ACCEPTANCE_TOKEN }}

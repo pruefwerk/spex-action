@@ -14,6 +14,10 @@ from unittest import mock
 from test_transport import TransportCase, transport
 from transport_fixture import API
 
+# Receipt ZIP timestamps must stay within ZIP's supported date range on every
+# Python version. Keep the simulated wall clock separate from elapsed time.
+WALL_CLOCK_EPOCH = 1700000000
+
 
 class AuthenticationTests(TransportCase):
     def app_env(self):
@@ -58,7 +62,7 @@ class AuthenticationTests(TransportCase):
                 return {
                     "token": "PRIVATE_" + str(len(calls)),
                     "expires_at": datetime.fromtimestamp(
-                        10000 + now[0] + 3600, timezone.utc
+                        WALL_CLOCK_EPOCH + now[0] + 3600, timezone.utc
                     ).isoformat(),
                 }
             return {}
@@ -66,7 +70,7 @@ class AuthenticationTests(TransportCase):
         with (
             mock.patch.object(transport.time, "monotonic", side_effect=lambda: now[0]),
             mock.patch.object(
-                transport.time, "time", side_effect=lambda: 10000 + now[0]
+                transport.time, "time", side_effect=lambda: WALL_CLOCK_EPOCH + now[0]
             ),
             mock.patch.object(
                 transport.AppCredentials, "jwt", return_value="PRIVATE_JWT"
@@ -227,7 +231,7 @@ class AuthenticationTests(TransportCase):
                         return {
                             "token": token,
                             "expires_at": datetime.fromtimestamp(
-                                10000 + now[0] + 3600, timezone.utc
+                                WALL_CLOCK_EPOCH + now[0] + 3600, timezone.utc
                             ).isoformat(),
                         }
                     used.append((path, bearer))
@@ -240,7 +244,9 @@ class AuthenticationTests(TransportCase):
                         transport.time, "monotonic", side_effect=lambda: now[0]
                     ),
                     mock.patch.object(
-                        transport.time, "time", side_effect=lambda: 10000 + now[0]
+                        transport.time,
+                        "time",
+                        side_effect=lambda: WALL_CLOCK_EPOCH + now[0],
                     ),
                     mock.patch.object(
                         transport.AppCredentials, "jwt", return_value="PRIVATE_JWT"
