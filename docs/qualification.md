@@ -1,5 +1,24 @@
 # Action qualification checkpoint
 
+## First published preview
+
+Published `v0.1.0-rc.1` from commit
+`a5af880742705dc4a0139f86b269d92db666a9ce` under `pruefwerk/spex-action`.
+The [hosted qualification run](https://github.com/pruefwerk/spex-action/actions/runs/38628800514)
+passed on Linux and macOS with Python 3.11 and 3.13. Ruff, Pyright and real request
+artifact upload/download checks passed. Each hosted suite discovered 85 tests and
+explicitly skipped eight optional Spex-binary regression checks. All 85 passed
+locally with the candidate executable.
+
+The first hosted run found that the renewal test's simulated 1970 clock produced
+receipt ZIP timestamps unsupported by older Python versions. The test now uses
+a supported date while keeping simulated elapsed time separate. The fix changes
+only the fixture clock, not runtime token renewal.
+
+The preview includes Spex's unchanged source-available license. Full hosted
+caller-to-runtime acceptance, live App authentication and remote cancellation
+and cleanup still need qualification.
+
 ## Prepared reusable-workflow requests
 
 All 85 tests pass against the local reusable-capable Spex executable, along with
@@ -11,7 +30,7 @@ the default.
 
 Spex v0.1.0-rc.46 includes reusable admission and trusted runtime staging.
 Hosted preparation-to-reusable-workflow qualification still requires the runtime
-to pin that release and publish the Action and trusted runtime files. A successful
+to pin that release and publish its trusted files and workflow. A successful
 preparation step does not qualify the acceptance environment.
 
 ## Renewable GitHub App authentication

@@ -3,10 +3,10 @@
   "blockers": [
     {
       "id": "hosted-action-qualification",
-      "status": "BLOCKED",
-      "evidence": "No GitHub remote is configured. Local transport and composite-wiring tests use a mock GitHub service and need no Spex executable. Linux/macOS Python matrix and real raw-envelope artifact upload/download are configured but have not run in GitHub.",
+      "status": "PASS",
+      "evidence": "Published pruefwerk/spex-action v0.1.0-rc.1 at a5af880742705dc4a0139f86b269d92db666a9ce. Hosted run 38628800514 passed Linux/macOS Python 3.11/3.13 checks and real raw-envelope artifact upload/download. The hosted suites skip eight optional Spex-binary checks; all 85 tests passed locally with the candidate executable.",
       "affects": ["composite Action hosted execution"],
-      "resolution": "Approve repository publication and run the checked-in CI. No caller-side Spex release is required. Hosted wiring checks do not replace live receiver qualification."
+      "resolution": "Hosted wiring qualification passed. These checks do not replace live receiver qualification."
     },
     {
       "id": "live-runtime-qualification",
@@ -20,7 +20,7 @@
       "status": "BLOCKED",
       "evidence": "Dispatch and prepare modes use the same spex.transport/v1 envelope. Published Spex v0.1.0-rc.46 implements current-run reusable admission and private runtime staging. The runtime's shared Action and workflow wiring still need publication and matching reviewed pins; hosted caller-to-receiver execution is unqualified. Earlier v1/v2 CLI clients use a different protocol.",
       "affects": ["remote Action end-to-end", "runtime admission", "cross-repository credentials", "remote cancellation and cleanup"],
-      "resolution": "Pin the runtime to Spex v0.1.0-rc.46 and publish the Action and runtime workflow. Enable runtime Action sharing, use matching reviewed workflow/Action refs, grant caller permissions and authorize runtime OIDC/fixture access. Qualify inline connectivity and runtime-owned baseline execution on GitHub. Dispatch mode still requires cross-repository credentials."
+      "resolution": "Use published spex-action v0.1.0-rc.1, pin the runtime to Spex v0.1.0-rc.46 and publish the runtime workflow. Enable runtime Action sharing, use matching reviewed workflow/Action refs, grant caller permissions and authorize runtime OIDC/fixture access. Qualify inline connectivity and runtime-owned baseline execution on GitHub. Dispatch mode still requires cross-repository credentials."
     }
   ]
 }
